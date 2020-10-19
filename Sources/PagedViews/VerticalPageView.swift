@@ -7,8 +7,30 @@
 
 import SwiftUI
 
-public struct VerticalPageView<Content, SelectionValue>: View
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
+public struct VerticalPageView<Content, SelectionValue>: PagingView
 where Content: View, SelectionValue: Hashable {
+    
+    public func position(_ position: PageIndexPosition) -> VerticalPageView<Content, SelectionValue> {
+        let newView = Self.init(selection: self.selection, pageIndexPosition: position, scrollDirection: self.scrollDirection) {
+            content
+        }
+        return newView
+    }
+    
+    internal func orientation(_ orientation: PagingOrientation) -> VerticalPageView<Content, SelectionValue> {
+        // Only here to satisfy protocol requirement
+        return self
+    }
+    
+    public func scrollDirection(_ direction: ScrollDirection) -> VerticalPageView<Content, SelectionValue> {
+        let newView = Self.init(selection: self.selection, pageIndexPosition: self.position, scrollDirection: direction) {
+            content
+        }
+        return newView
+    }
+    
 
     let position: PageIndexPosition
     let orientation: PagingOrientation = .vertical

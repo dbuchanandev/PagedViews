@@ -19,7 +19,26 @@ public enum PagingOrientation {
     case horizontal, vertical
 }
 
+protocol PagingView: View {
+    associatedtype Content
+    associatedtype SelectionValue
+    
+    var position: PageIndexPosition { get }
+    var orientation: PagingOrientation { get }
+    var scrollDirection: ScrollDirection { get }
+    
+    var selection: Binding<SelectionValue>? { get set }
+    
+    var content: Content { get }
+    
+    func position(_ position: PageIndexPosition) -> Self
+    func orientation(_ orientation: PagingOrientation) -> Self
+    func scrollDirection(_ direction: ScrollDirection) -> Self
+}
+
 // MARK: PageView
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
 public extension PageView {
     init(
         @ViewBuilder content: @escaping () -> Content
@@ -43,6 +62,8 @@ public extension PageView {
     }
 }
 
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
 public extension PageView
 where SelectionValue == Int {
     init(
@@ -72,10 +93,14 @@ where SelectionValue == Int {
 }
 
 // MARK: VerticalPageView
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
 public extension VerticalPageView {
     
 }
 
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
 public extension VerticalPageView
 where SelectionValue == Int {
     init(
