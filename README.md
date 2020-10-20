@@ -4,7 +4,7 @@
 Simplifies creating paged tab views.
 These views should behave very similarly to a standard SwiftUI TabView with regard to
 selection values, tags, etc.
-Does not support macOS. Documentation here is very incomplete.
+Does not support watchOS or native macOS. Documentation here is very incomplete.
 
 ## Usage
 ### Simple init with modifiers
@@ -28,7 +28,7 @@ struct ContentView: View {
 }
 ```
 
-### Init with selection value and ForEach automatic tagging
+### With selection value and ForEach automatic tagging
 ```swift
 import SwiftUI
 import PagedViews
@@ -58,7 +58,7 @@ struct ContentView: View {
 }
 ```
 
-### Init with selection value and manual tagging
+### With selection value and manual tagging
 ```swift
 import SwiftUI
 import PagedViews

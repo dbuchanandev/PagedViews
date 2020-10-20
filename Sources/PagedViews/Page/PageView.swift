@@ -9,40 +9,57 @@ import SwiftUI
 
 @available(watchOS, unavailable)
 @available(macOS, unavailable)
-public struct PageView<Content, SelectionValue>: PagingView
+public struct PageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
-    
-    public func position(_ position: PageIndexPosition) -> PageView<Content, SelectionValue> {
-        let newView = Self.init(selection: self.selection, pageIndexPosition: position, scrollDirection: self.scrollDirection) {
+
+    public func pagingPosition(_ position: PageIndexPosition) -> PageView<Content, SelectionValue> {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: position,
+            scrollDirection: self.scrollDirection,
+            orientation: self.orientation
+        ) {
             content
         }
         return newView
     }
 
-    public func orientation(_ orientation: PagingOrientation) -> PageView<Content, SelectionValue> {
-        let newView = Self.init(selection: self.selection, pageIndexPosition: self.position, scrollDirection: self.scrollDirection, orientation: orientation) {
+    public func pagingOrientation(_ orientation: PagingOrientation) -> PageView<
+        Content, SelectionValue
+    > {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: self.position,
+            scrollDirection: self.scrollDirection,
+            orientation: orientation
+        ) {
             content
         }
         return newView
     }
 
     public func scrollDirection(_ direction: ScrollDirection) -> PageView<Content, SelectionValue> {
-        let newView = Self.init(selection: self.selection, pageIndexPosition: position, scrollDirection: direction) {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: position,
+            scrollDirection: direction,
+            orientation: self.orientation
+        ) {
             content
         }
         return newView
     }
 
-    let position: PageIndexPosition
-    let orientation: PagingOrientation
-    let scrollDirection: ScrollDirection
+    public let position: PageIndexPosition
+    public let orientation: PagingOrientation
+    public let scrollDirection: ScrollDirection
 
     var selection: Binding<SelectionValue>?
 
     let content: Content
 
     public init(
-        selection: Binding<SelectionValue>? = nil,
+        selection: Binding<SelectionValue>?,
         pageIndexPosition: PageIndexPosition = .trailing,
         scrollDirection: ScrollDirection = .descending,
         orientation: PagingOrientation = .horizontal,
@@ -108,42 +125,46 @@ where Content: View, SelectionValue: Hashable {
 
     // Rotation logic for the `.rotationEffect` and `.rotation3DEffect` modifiers.
     private var rotation: (content: Angle, content3D: Angle, container: Angle, container3D: Angle) {
-        if orientation == .horizontal {
-            if scrollDirection == .descending {
-                return (.degrees(0), .degrees(0), .degrees(0), .degrees(0))
+        switch orientation {
+        case .horizontal:
+            switch position {
+            case .leading, .trailing, .bottom:
+                switch scrollDirection {
+                case .ascending:
+                    return (.degrees(180), .degrees(180), .degrees(180), .degrees(180))
+                case .descending:
+                    return (.degrees(0), .degrees(0), .degrees(0), .degrees(0))
+                }
+            case .top:
+                switch scrollDirection {
+                case .ascending:
+                    return (.degrees(180), .degrees(0), .degrees(180), .degrees(0))
+                case .descending:
+                    return (.degrees(0), .degrees(180), .degrees(0), .degrees(180))
+                }
             }
-            else if scrollDirection == .ascending {
-                return (.degrees(0), .degrees(180), .degrees(0), .degrees(180))
-            }
-            else {
-                return (.degrees(0), .degrees(0), .degrees(0), .degrees(0))
-            }
-        }
-        else {
-            if position == .trailing, scrollDirection == .descending {
-                return (.degrees(-90), .degrees(180), .degrees(-90), .degrees(180))
-            }
-            else if position == .trailing, scrollDirection == .ascending {
-                return (.degrees(90), .degrees(0), .degrees(-90), .degrees(0))
-            }
-            else if position == .leading, scrollDirection == .descending {
-                return (.degrees(-90), .degrees(0), .degrees(90), .degrees(0))
-            }
-            else if position == .leading, scrollDirection == .ascending {
-                return (.degrees(90), .degrees(180), .degrees(90), .degrees(180))
-            }
-            else {
-                return (.degrees(0), .degrees(0), .degrees(0), .degrees(0))
+        case .vertical:
+            switch position {
+            case .leading, .top:
+                switch scrollDirection {
+                case .ascending:
+                    return (.degrees(90), .degrees(180), .degrees(90), .degrees(180))
+                case .descending:
+                    return (.degrees(-90), .degrees(0), .degrees(90), .degrees(0))
+                }
+            case .bottom, .trailing:
+                switch scrollDirection {
+                case .ascending:
+                    return (.degrees(90), .degrees(0), .degrees(-90), .degrees(0))
+                case .descending:
+                    return (.degrees(-90), .degrees(180), .degrees(-90), .degrees(180))
+                }
             }
         }
     }
+
     // Rotation axis logic for the `.rotationEffect` and `.rotation3DEffect` modifiers.
     private var axis: (x: CGFloat, y: CGFloat, z: CGFloat) {
-        if orientation == .vertical {
-            return (x: 1.0, y: 0.0, z: 0.0)
-        }
-        else {
-            return (x: 0.0, y: 1.0, z: 0.0)
-        }
+        return (x: 1.0, y: 0.0, z: 0.0)
     }
 }

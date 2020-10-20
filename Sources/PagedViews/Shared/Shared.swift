@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Donavon Buchanan on 10/18/20.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 public enum PageIndexPosition {
-    case leading, trailing
+    case leading, trailing, top, bottom
 }
 
 public enum ScrollDirection {
@@ -19,99 +19,33 @@ public enum PagingOrientation {
     case horizontal, vertical
 }
 
-protocol PagingView: View {
+@available(watchOS, unavailable)
+@available(macOS, unavailable)
+protocol Pageable: View {
     associatedtype Content
     associatedtype SelectionValue
-    
+
     var position: PageIndexPosition { get }
     var orientation: PagingOrientation { get }
     var scrollDirection: ScrollDirection { get }
-    
+
     var selection: Binding<SelectionValue>? { get set }
-    
+
     var content: Content { get }
     
-    func position(_ position: PageIndexPosition) -> Self
-    func orientation(_ orientation: PagingOrientation) -> Self
+    /// Updates the `pageIndexPosition` value of the view and returns the modified view.
+    /// - Parameter position: Case value of `PageIndexPosition` to set
+    /// how the view positions its paging index view.
+    func pagingPosition(_ position: PageIndexPosition) -> Self
+    
+    /// Updates the `orientation` value of the view and returns the modified view.
+    /// - Parameter orientation: Case value of `PagingOrientation` to set
+    /// if the view will be paginated in either `.vertical` or `.horizontal` orientation.
+    func pagingOrientation(_ orientation: PagingOrientation) -> Self
+    
+    /// Updates the `direction` value of the view and returns the modified view.
+    /// - Parameter direction: Case value of `ScrollDirection` to set
+    /// which direction the view will scroll, with `.descending` being default behavior and
+    /// `.ascending` being the inverse behavior.
     func scrollDirection(_ direction: ScrollDirection) -> Self
-}
-
-// MARK: PageView
-@available(watchOS, unavailable)
-@available(macOS, unavailable)
-public extension PageView {
-    init(
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.selection = nil
-        self.orientation = .horizontal
-        self.position = .trailing
-        self.scrollDirection = .descending
-        self.content = content()
-    }
-    
-    init(
-        selection: Binding<SelectionValue>? = nil,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.selection = selection
-        self.orientation = .horizontal
-        self.position = .trailing
-        self.scrollDirection = .descending
-        self.content = content()
-    }
-}
-
-@available(watchOS, unavailable)
-@available(macOS, unavailable)
-public extension PageView
-where SelectionValue == Int {
-    init(
-        selection: Binding<Int>? = nil,
-        orientation: PagingOrientation = .horizontal,
-        pageIndexPosition: PageIndexPosition = .trailing,
-        scrollDirection: ScrollDirection = .descending,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.selection = selection
-        self.orientation = orientation
-        self.position = pageIndexPosition
-        self.scrollDirection = scrollDirection
-        self.content = content()
-    }
-    
-    init(
-        selection: Binding<SelectionValue>? = nil,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.selection = selection
-        self.orientation = .horizontal
-        self.position = .trailing
-        self.scrollDirection = .descending
-        self.content = content()
-    }
-}
-
-// MARK: VerticalPageView
-@available(watchOS, unavailable)
-@available(macOS, unavailable)
-public extension VerticalPageView {
-    
-}
-
-@available(watchOS, unavailable)
-@available(macOS, unavailable)
-public extension VerticalPageView
-where SelectionValue == Int {
-    init(
-        selection: Binding<Int>? = nil,
-        pageIndexPosition: PageIndexPosition = .trailing,
-        scrollDirection: ScrollDirection = .descending,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.selection = selection
-        self.position = pageIndexPosition
-        self.scrollDirection = scrollDirection
-        self.content = content()
-    }
 }
