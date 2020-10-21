@@ -28,13 +28,13 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
-    public func allowsScrolling(_ bool: Bool) -> VerticalPageView<Content, SelectionValue> {
+    public func allowsScrolling(_ scrollingEnabled: Bool) -> VerticalPageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
             pageIndexPosition: self.position,
             indexDisplayMode: self.indexDisplayMode,
             scrollDirection: scrollDirection,
-            scrollingEnabled: self.scrollingEnabled,
+            scrollingEnabled: scrollingEnabled,
             orientation: self.orientation
         ) {
             content

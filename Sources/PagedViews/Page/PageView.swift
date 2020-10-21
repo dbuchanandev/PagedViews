@@ -28,13 +28,13 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
-    public func allowsScrolling(_ bool: Bool) -> PageView<Content, SelectionValue> {
+    public func allowsScrolling(_ scrollingEnabled: Bool) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
             pageIndexPosition: self.position,
             indexDisplayMode: self.indexDisplayMode,
             scrollDirection: scrollDirection,
-            scrollingEnabled: self.scrollingEnabled,
+            scrollingEnabled: scrollingEnabled,
             orientation: self.orientation
         ) {
             content
@@ -130,9 +130,7 @@ where Content: View, SelectionValue: Hashable {
                                 axis: axis
                             )
                     }
-                    .onAppear {
-                        debugPrint("Scrolling: \(scrollingEnabled)")
-                    }
+                    .disabled(!scrollingEnabled)
                     // Sets the visibility behavior of the paging dots
                     .indexViewStyle(
                         PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
