@@ -129,6 +129,7 @@ where Content: View, SelectionValue: Hashable {
                                 rotation.content3D,
                                 axis: axis
                             )
+                            .allowsHitTesting(true)
                     }
                     .allowsHitTesting(scrollingEnabled)
                     // Sets the visibility behavior of the paging dots
