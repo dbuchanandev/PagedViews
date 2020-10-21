@@ -112,6 +112,10 @@ where Content: View, SelectionValue: Hashable {
 
     public var body: some View {
         GeometryReader { geometry in
+            /*
+             This .init() for the ScrollView axis keeps the paging view from being scrolled independently
+             `[]` may give the same result
+             */
             ScrollView(.init()) {
                 LazyHStack {
                     TabView(selection: selection) {
@@ -125,7 +129,9 @@ where Content: View, SelectionValue: Hashable {
                                 rotation.content3D,
                                 axis: axis
                             )
+//                            .allowsHitTesting(true)
                     }
+                    .allowsHitTesting(scrollingEnabled)
                     // Sets the visibility behavior of the paging dots
                     .indexViewStyle(
                         PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
