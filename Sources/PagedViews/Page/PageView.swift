@@ -130,7 +130,9 @@ where Content: View, SelectionValue: Hashable {
                                 axis: axis
                             )
                     }
-                    .disabled(scrollingEnabled)
+                    .onAppear {
+                        debugPrint("Scrolling: \(scrollingEnabled)")
+                    }
                     // Sets the visibility behavior of the paging dots
                     .indexViewStyle(
                         PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
