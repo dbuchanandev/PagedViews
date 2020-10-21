@@ -37,7 +37,7 @@ public struct LibraryModifierContent: LibraryContentProvider {
         )
         
         LibraryItem(
-            base.scrollingEnabled(scrollingEnabled),
+            base.allowsScrolling(scrollingEnabled),
             visible: true,
             title: "Scrolling Enabled",
             category: .layout
@@ -113,7 +113,7 @@ public protocol PagingLibrary {
     
     func indexDisplayMode(_ displayMode: IndexDisplayMode) -> Self
     
-    func scrollingEnabled(_ bool: Bool) -> Self
+    func allowsScrolling(_ bool: Bool) -> Self
 }
 
 @available(watchOS, unavailable)
@@ -123,7 +123,7 @@ public struct PagingLibraryContent: PagingLibrary {
         self
     }
     
-    public func scrollingEnabled(_ bool: Bool) -> PagingLibraryContent {
+    public func allowsScrolling(_ bool: Bool) -> PagingLibraryContent {
         self
     }
     

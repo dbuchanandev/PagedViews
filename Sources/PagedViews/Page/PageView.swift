@@ -27,7 +27,7 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
-    public func scrollingEnabled(_ bool: Bool) -> PageView<Content, SelectionValue> {
+    public func allowsScrolling(_ bool: Bool) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
             pageIndexPosition: self.position,
@@ -156,8 +156,8 @@ where Content: View, SelectionValue: Hashable {
                             ? geometry.size.height
                             : geometry.size.width
                     )
+                    .allowsHitTesting(true)
                 }
-                .allowsHitTesting(true)
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
             .allowsHitTesting(scrollingEnabled)
