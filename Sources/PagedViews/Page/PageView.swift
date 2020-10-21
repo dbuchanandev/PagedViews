@@ -12,8 +12,9 @@ import SwiftUI
 public struct PageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
 
-    public func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> PageView<Content, SelectionValue>
-    {
+    public func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> PageView<
+        Content, SelectionValue
+    > {
         let newView = Self.init(
             selection: self.selection,
             pageIndexPosition: self.position,
@@ -156,11 +157,13 @@ where Content: View, SelectionValue: Hashable {
                             ? geometry.size.height
                             : geometry.size.width
                     )
-                    .allowsHitTesting(true)
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
-            .allowsHitTesting(scrollingEnabled)
+            .frame(
+                width: scrollingEnabled ? geometry.size.width : (geometry.size.width + 1),
+                height: scrollingEnabled ? geometry.size.height : geometry.size.height + 1
+            )
         }
     }
 
