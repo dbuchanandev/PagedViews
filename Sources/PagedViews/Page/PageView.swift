@@ -112,55 +112,52 @@ where Content: View, SelectionValue: Hashable {
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollView([]) {
-                LazyHStack {
-                    TabView(selection: selection) {
-                        content
-                            // Rotates each Tab's content as needed
-                            .rotationEffect(
-                                rotation.content
-                            )
-                            // Flips each Tab's content as needed
-                            .rotation3DEffect(
-                                rotation.content3D,
-                                axis: axis
-                            )
-                    }
-                    // Sets the visibility behavior of the paging dots
-                    .indexViewStyle(
-                        PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
-                    )
-                    /*
-                     For some reason, seems both of these modifiers are necessary to
-                     achieve the desired behavior
-                     */
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: displayMode.tabViewStyle))
-                    /*
-                     When the TabView is rotated, SwiftUI tends to favor the smallest possible
-                     frame size, causing all the content, including the paging dots, to collapse inward
-                     */
-                    // Rotates the TabView to the specified vertical position
-                    .rotationEffect(
-                        rotation.container
-                    )
-                    // Flips the TabView to the specified position
-                    .rotation3DEffect(
-                        rotation.container3D,
-                        axis: axis
-                    )
-                    // TODO: frame needs to account for orientation
-                    .frame(
-                        width: orientation == .horizontal
-                            ? geometry.size.width
-                            : geometry.size.height,
-                        height: orientation == .horizontal
-                            ? geometry.size.height
-                            : geometry.size.width
-                    )
+            LazyHStack {
+                TabView(selection: selection) {
+                    content
+                        // Rotates each Tab's content as needed
+                        .rotationEffect(
+                            rotation.content
+                        )
+                        // Flips each Tab's content as needed
+                        .rotation3DEffect(
+                            rotation.content3D,
+                            axis: axis
+                        )
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                // Sets the visibility behavior of the paging dots
+                .indexViewStyle(
+                    PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
+                )
+                /*
+                 For some reason, seems both of these modifiers are necessary to
+                 achieve the desired behavior
+                 */
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: displayMode.tabViewStyle))
+                /*
+                 When the TabView is rotated, SwiftUI tends to favor the smallest possible
+                 frame size, causing all the content, including the paging dots, to collapse inward
+                 */
+                // Rotates the TabView to the specified vertical position
+                .rotationEffect(
+                    rotation.container
+                )
+                // Flips the TabView to the specified position
+                .rotation3DEffect(
+                    rotation.container3D,
+                    axis: axis
+                )
+                // TODO: frame needs to account for orientation
+                .frame(
+                    width: orientation == .horizontal
+                        ? geometry.size.width
+                        : geometry.size.height,
+                    height: orientation == .horizontal
+                        ? geometry.size.height
+                        : geometry.size.width
+                )
             }
-            .fixedSize(horizontal: !scrollingEnabled, vertical: !scrollingEnabled)
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
 
