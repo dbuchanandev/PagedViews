@@ -112,7 +112,7 @@ where Content: View, SelectionValue: Hashable {
 
     public var body: some View {
         GeometryReader { geometry in
-            ScrollView {
+            ScrollView(scrollingEnabled ? .init() : []) {
                 LazyHStack {
                     TabView(selection: selection) {
                         content
@@ -160,10 +160,6 @@ where Content: View, SelectionValue: Hashable {
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
-            .frame(
-                width: scrollingEnabled ? geometry.size.width : (geometry.size.width + 1),
-                height: scrollingEnabled ? geometry.size.height : geometry.size.height + 1
-            )
         }
     }
 
