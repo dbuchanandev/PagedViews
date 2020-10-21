@@ -129,6 +129,7 @@ where Content: View, SelectionValue: Hashable {
                                 rotation.content3D,
                                 axis: axis
                             )
+                            .disabled(false)
                     }
                     .disabled(!scrollingEnabled)
                     // Sets the visibility behavior of the paging dots
