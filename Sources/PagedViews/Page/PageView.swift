@@ -157,10 +157,10 @@ where Content: View, SelectionValue: Hashable {
                             : geometry.size.width
                     )
                 }
+//                .allowsHitTesting(true)
                 .frame(width: geometry.size.width, height: geometry.size.height)
-                .allowsHitTesting(true)
             }
-            .allowsHitTesting(scrollingEnabled)
+//            .allowsHitTesting(scrollingEnabled)
         }
     }
 
