@@ -35,6 +35,20 @@ public struct LibraryModifierContent: LibraryContentProvider {
             title: "Scroll Direction",
             category: .layout
         )
+        
+        LibraryItem(
+            base.scrollingEnabled(scrollingEnabled),
+            visible: true,
+            title: "Scrolling Enabled",
+            category: .layout
+        )
+        
+        LibraryItem(
+            base.indexDisplayMode(indexDisplayMode),
+            visible: true,
+            title: "Paging Index Display Mode",
+            category: .layout
+        )
     }
 
     @LibraryContentBuilder
@@ -71,6 +85,8 @@ public struct LibraryModifierContent: LibraryContentProvider {
     private let position: PageIndexPosition = .trailing
     private let orientation: PagingOrientation = .horizontal
     private let scrollDirection: ScrollDirection = .descending
+    private let scrollingEnabled: Bool = true
+    private let indexDisplayMode: IndexDisplayMode = .always
 }
 
 @available(watchOS, unavailable)
@@ -79,14 +95,39 @@ public protocol PagingLibrary {
     associatedtype Content
     associatedtype SelectionValue
 
+    /// Updates the `pageIndexPosition` value of the view and returns the modified view.
+    /// - Parameter position: Case value of `PageIndexPosition` to set
+    /// how the view positions its paging index view.
     func pagingPosition(_ position: PageIndexPosition) -> Self
+    
+    /// Updates the `orientation` value of the view and returns the modified view.
+    /// - Parameter orientation: Case value of `PagingOrientation` to set
+    /// if the view will be paginated in either `.vertical` or `.horizontal` orientation.
     func pagingOrientation(_ orientation: PagingOrientation) -> Self
+    
+    /// Updates the `direction` value of the view and returns the modified view.
+    /// - Parameter direction: Case value of `ScrollDirection` to set
+    /// which direction the view will scroll, with `.descending` being default behavior and
+    /// `.ascending` being the inverse behavior.
     func scrollDirection(_ direction: ScrollDirection) -> Self
+    
+    func indexDisplayMode(_ displayMode: IndexDisplayMode) -> Self
+    
+    func scrollingEnabled(_ bool: Bool) -> Self
 }
 
 @available(watchOS, unavailable)
 @available(macOS, unavailable)
 public struct PagingLibraryContent: PagingLibrary {
+    public func indexDisplayMode(_ displayMode: IndexDisplayMode) -> PagingLibraryContent {
+        self
+    }
+    
+    public func scrollingEnabled(_ bool: Bool) -> PagingLibraryContent {
+        self
+    }
+    
+    
     public func pagingPosition(_ position: PageIndexPosition) -> PagingLibraryContent {
         self
     }

@@ -12,7 +12,7 @@ import SwiftUI
 public struct VerticalPageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
 
-    func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> VerticalPageView<
+    public func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> VerticalPageView<
         Content, SelectionValue
     > {
         let newView = Self.init(
@@ -28,7 +28,7 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
-    func disableScrolling(_ bool: Bool) -> VerticalPageView<Content, SelectionValue> {
+    public func scrollingEnabled(_ bool: Bool) -> VerticalPageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
             pageIndexPosition: self.position,

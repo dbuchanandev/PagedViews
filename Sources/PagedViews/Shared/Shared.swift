@@ -59,5 +59,5 @@ protocol Pageable: View {
     
     func indexDisplayMode(_ displayMode: IndexDisplayMode) -> Self
     
-    func disableScrolling(_ bool: Bool) -> Self
+    func scrollingEnabled(_ bool: Bool) -> Self
 }
