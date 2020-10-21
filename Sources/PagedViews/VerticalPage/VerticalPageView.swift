@@ -12,6 +12,36 @@ import SwiftUI
 public struct VerticalPageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
 
+    func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> VerticalPageView<
+        Content, SelectionValue
+    > {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: self.position,
+            indexDisplayMode: indexDisplayMode,
+            scrollDirection: self.scrollDirection,
+            scrollingEnabled: self.scrollingEnabled,
+            orientation: self.orientation
+        ) {
+            content
+        }
+        return newView
+    }
+
+    func disableScrolling(_ bool: Bool) -> VerticalPageView<Content, SelectionValue> {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: self.position,
+            indexDisplayMode: self.indexDisplayMode,
+            scrollDirection: scrollDirection,
+            scrollingEnabled: self.scrollingEnabled,
+            orientation: self.orientation
+        ) {
+            content
+        }
+        return newView
+    }
+
     public func pagingPosition(_ position: PageIndexPosition) -> VerticalPageView<
         Content, SelectionValue
     > {
@@ -54,9 +84,13 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
+    let indexDisplayMode: IndexDisplayMode
+
     let position: PageIndexPosition
     let orientation: PagingOrientation
+
     let scrollDirection: ScrollDirection
+    let scrollingEnabled: Bool
 
     var selection: Binding<SelectionValue>?
 
@@ -65,26 +99,34 @@ where Content: View, SelectionValue: Hashable {
     public init(
         selection: Binding<SelectionValue>,
         pageIndexPosition: PageIndexPosition = .trailing,
+        indexDisplayMode: IndexDisplayMode = .always,
         scrollDirection: ScrollDirection = .descending,
+        scrollingEnabled: Bool = true,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.selection = selection
         self.position = pageIndexPosition
         self.scrollDirection = scrollDirection
         self.orientation = .vertical
+        self.indexDisplayMode = indexDisplayMode
+        self.scrollingEnabled = scrollingEnabled
         self.content = content()
     }
 
     private init(
         selection: Binding<SelectionValue>? = nil,
         pageIndexPosition: PageIndexPosition = .trailing,
+        indexDisplayMode: IndexDisplayMode = .always,
         scrollDirection: ScrollDirection = .descending,
+        scrollingEnabled: Bool = true,
         orientation: PagingOrientation = .vertical,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.selection = selection
         self.position = pageIndexPosition
+        self.indexDisplayMode = indexDisplayMode
         self.scrollDirection = scrollDirection
+        self.scrollingEnabled = scrollingEnabled
         self.orientation = orientation
         self.content = content()
     }

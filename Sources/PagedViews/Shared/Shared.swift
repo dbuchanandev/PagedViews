@@ -19,15 +19,23 @@ public enum PagingOrientation {
     case horizontal, vertical
 }
 
+public enum IndexDisplayMode {
+    case always, automatic, interactive, never
+}
+
 @available(watchOS, unavailable)
 @available(macOS, unavailable)
 protocol Pageable: View {
     associatedtype Content
     associatedtype SelectionValue
+    
+    var indexDisplayMode: IndexDisplayMode { get }
 
     var position: PageIndexPosition { get }
     var orientation: PagingOrientation { get }
+    
     var scrollDirection: ScrollDirection { get }
+    var scrollingEnabled: Bool { get }
 
     var selection: Binding<SelectionValue>? { get set }
 
@@ -48,4 +56,8 @@ protocol Pageable: View {
     /// which direction the view will scroll, with `.descending` being default behavior and
     /// `.ascending` being the inverse behavior.
     func scrollDirection(_ direction: ScrollDirection) -> Self
+    
+    func indexDisplayMode(_ displayMode: IndexDisplayMode) -> Self
+    
+    func disableScrolling(_ bool: Bool) -> Self
 }

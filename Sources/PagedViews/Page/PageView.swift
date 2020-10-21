@@ -12,6 +12,35 @@ import SwiftUI
 public struct PageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
 
+    func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> PageView<Content, SelectionValue>
+    {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: self.position,
+            indexDisplayMode: indexDisplayMode,
+            scrollDirection: self.scrollDirection,
+            scrollingEnabled: self.scrollingEnabled,
+            orientation: self.orientation
+        ) {
+            content
+        }
+        return newView
+    }
+
+    func disableScrolling(_ bool: Bool) -> PageView<Content, SelectionValue> {
+        let newView = Self.init(
+            selection: self.selection,
+            pageIndexPosition: self.position,
+            indexDisplayMode: self.indexDisplayMode,
+            scrollDirection: scrollDirection,
+            scrollingEnabled: self.scrollingEnabled,
+            orientation: self.orientation
+        ) {
+            content
+        }
+        return newView
+    }
+
     public func pagingPosition(_ position: PageIndexPosition) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
@@ -50,9 +79,13 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
+    public let indexDisplayMode: IndexDisplayMode
+
     public let position: PageIndexPosition
     public let orientation: PagingOrientation
+
     public let scrollDirection: ScrollDirection
+    public let scrollingEnabled: Bool
 
     var selection: Binding<SelectionValue>?
 
@@ -61,7 +94,9 @@ where Content: View, SelectionValue: Hashable {
     public init(
         selection: Binding<SelectionValue>?,
         pageIndexPosition: PageIndexPosition = .trailing,
+        indexDisplayMode: IndexDisplayMode = .always,
         scrollDirection: ScrollDirection = .descending,
+        scrollingEnabled: Bool = true,
         orientation: PagingOrientation = .horizontal,
         @ViewBuilder content: @escaping () -> Content
     ) {
@@ -69,6 +104,8 @@ where Content: View, SelectionValue: Hashable {
         self.position = pageIndexPosition
         self.scrollDirection = scrollDirection
         self.orientation = orientation
+        self.indexDisplayMode = indexDisplayMode
+        self.scrollingEnabled = scrollingEnabled
         self.content = content()
     }
 
@@ -89,12 +126,14 @@ where Content: View, SelectionValue: Hashable {
                             )
                     }
                     // Sets the visibility behavior of the paging dots
-                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .indexViewStyle(
+                        PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
+                    )
                     /*
                      For some reason, seems both of these modifiers are necessary to
                      achieve the desired behavior
                      */
-                    .tabViewStyle(PageTabViewStyle())
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: displayMode.tabViewStyle))
                     /*
                      When the TabView is rotated, SwiftUI tends to favor the smallest possible
                      frame size, causing all the content, including the paging dots, to collapse inward
@@ -119,7 +158,32 @@ where Content: View, SelectionValue: Hashable {
                     )
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)
+                .allowsHitTesting(true)
             }
+            .allowsHitTesting(scrollingEnabled)
+        }
+    }
+
+    // Index Display Mode
+    private var displayMode:
+        (
+            pageStyle: PageIndexViewStyle.BackgroundDisplayMode,
+            tabViewStyle: PageTabViewStyle.IndexDisplayMode
+        )
+    {
+        // Just for my own convenience
+        let pageStyle = PageIndexViewStyle.BackgroundDisplayMode.self
+        let tabViewStyle = PageTabViewStyle.IndexDisplayMode.self
+
+        switch indexDisplayMode {
+        case .always:
+            return (pageStyle.always, tabViewStyle.always)
+        case .automatic:
+            return (pageStyle.automatic, tabViewStyle.automatic)
+        case .interactive:
+            return (pageStyle.interactive, tabViewStyle.automatic)
+        case .never:
+            return (pageStyle.never, tabViewStyle.never)
         }
     }
 
