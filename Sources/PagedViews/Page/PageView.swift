@@ -129,13 +129,11 @@ where Content: View, SelectionValue: Hashable {
                                 rotation.content3D,
                                 axis: axis
                             )
-                            .allowsHitTesting(true)
                     }
-                    .allowsHitTesting(scrollingEnabled)
                     // Sets the visibility behavior of the paging dots
-                    .indexViewStyle(
-                        PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
-                    )
+//                    .indexViewStyle(
+//                        PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
+//                    )
                     /*
                      For some reason, seems both of these modifiers are necessary to
                      achieve the desired behavior
