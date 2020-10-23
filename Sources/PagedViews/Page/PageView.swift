@@ -20,7 +20,7 @@ where Content: View, SelectionValue: Hashable {
             pageIndexPosition: self.position,
             indexDisplayMode: indexDisplayMode,
             scrollDirection: self.scrollDirection,
-            scrollingEnabled: self.scrollingEnabled,
+//            scrollingEnabled: self.scrollingEnabled,
             orientation: self.orientation
         ) {
             content
@@ -28,19 +28,19 @@ where Content: View, SelectionValue: Hashable {
         return newView
     }
 
-    public func allowsScrolling(_ scrollingEnabled: Bool) -> PageView<Content, SelectionValue> {
-        let newView = Self.init(
-            selection: self.selection,
-            pageIndexPosition: self.position,
-            indexDisplayMode: self.indexDisplayMode,
-            scrollDirection: scrollDirection,
-            scrollingEnabled: scrollingEnabled,
-            orientation: self.orientation
-        ) {
-            content
-        }
-        return newView
-    }
+//    internal func allowsScrolling(_ scrollingEnabled: Bool) -> PageView<Content, SelectionValue> {
+//        let newView = Self.init(
+//            selection: self.selection,
+//            pageIndexPosition: self.position,
+//            indexDisplayMode: self.indexDisplayMode,
+//            scrollDirection: scrollDirection,
+//            scrollingEnabled: scrollingEnabled,
+//            orientation: self.orientation
+//        ) {
+//            content
+//        }
+//        return newView
+//    }
 
     public func pagingPosition(_ position: PageIndexPosition) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
@@ -86,7 +86,7 @@ where Content: View, SelectionValue: Hashable {
     public let orientation: PagingOrientation
 
     public let scrollDirection: ScrollDirection
-    public let scrollingEnabled: Bool
+//    public let scrollingEnabled: Bool
 
     var selection: Binding<SelectionValue>?
 
@@ -97,7 +97,7 @@ where Content: View, SelectionValue: Hashable {
         pageIndexPosition: PageIndexPosition = .trailing,
         indexDisplayMode: IndexDisplayMode = .always,
         scrollDirection: ScrollDirection = .descending,
-        scrollingEnabled: Bool = true,
+//        scrollingEnabled: Bool = true,
         orientation: PagingOrientation = .horizontal,
         @ViewBuilder content: @escaping () -> Content
     ) {
@@ -106,13 +106,13 @@ where Content: View, SelectionValue: Hashable {
         self.scrollDirection = scrollDirection
         self.orientation = orientation
         self.indexDisplayMode = indexDisplayMode
-        self.scrollingEnabled = scrollingEnabled
+//        self.scrollingEnabled = scrollingEnabled
         self.content = content()
     }
 
     public var body: some View {
         GeometryReader { geometry in
-            LazyHStack {
+            HStack {
                 TabView(selection: selection) {
                     content
                         // Rotates each Tab's content as needed

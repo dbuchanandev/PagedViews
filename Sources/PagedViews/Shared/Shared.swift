@@ -35,7 +35,8 @@ protocol Pageable: View {
     var orientation: PagingOrientation { get }
     
     var scrollDirection: ScrollDirection { get }
-    var scrollingEnabled: Bool { get }
+    
+//    var scrollingEnabled: Bool { get }
 
     var selection: Binding<SelectionValue>? { get set }
 
@@ -59,5 +60,5 @@ protocol Pageable: View {
     
     func indexDisplayMode(_ displayMode: IndexDisplayMode) -> Self
     
-    func allowsScrolling(_ bool: Bool) -> Self
+//    func allowsScrolling(_ bool: Bool) -> Self
 }
