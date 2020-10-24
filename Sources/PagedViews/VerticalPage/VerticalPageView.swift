@@ -20,27 +20,12 @@ where Content: View, SelectionValue: Hashable {
             pageIndexPosition: self.position,
             indexDisplayMode: indexDisplayMode,
             scrollDirection: self.scrollDirection,
-//            scrollingEnabled: self.scrollingEnabled,
             orientation: self.orientation
         ) {
             content
         }
         return newView
     }
-
-//    internal func allowsScrolling(_ scrollingEnabled: Bool) -> VerticalPageView<Content, SelectionValue> {
-//        let newView = Self.init(
-//            selection: self.selection,
-//            pageIndexPosition: self.position,
-//            indexDisplayMode: self.indexDisplayMode,
-//            scrollDirection: scrollDirection,
-//            scrollingEnabled: scrollingEnabled,
-//            orientation: self.orientation
-//        ) {
-//            content
-//        }
-//        return newView
-//    }
 
     public func pagingPosition(_ position: PageIndexPosition) -> VerticalPageView<
         Content, SelectionValue
@@ -90,7 +75,6 @@ where Content: View, SelectionValue: Hashable {
     let orientation: PagingOrientation
 
     let scrollDirection: ScrollDirection
-//    let scrollingEnabled: Bool
 
     var selection: Binding<SelectionValue>?
 
@@ -109,7 +93,6 @@ where Content: View, SelectionValue: Hashable {
         self.scrollDirection = scrollDirection
         self.orientation = .vertical
         self.indexDisplayMode = indexDisplayMode
-//        self.scrollingEnabled = scrollingEnabled
         self.content = content()
     }
 
@@ -126,7 +109,6 @@ where Content: View, SelectionValue: Hashable {
         self.position = pageIndexPosition
         self.indexDisplayMode = indexDisplayMode
         self.scrollDirection = scrollDirection
-//        self.scrollingEnabled = scrollingEnabled
         self.orientation = orientation
         self.content = content()
     }

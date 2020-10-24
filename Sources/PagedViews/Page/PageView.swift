@@ -11,7 +11,7 @@ import SwiftUI
 @available(macOS, unavailable)
 public struct PageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {
-
+    
     public func indexDisplayMode(_ indexDisplayMode: IndexDisplayMode) -> PageView<
         Content, SelectionValue
     > {
@@ -20,28 +20,13 @@ where Content: View, SelectionValue: Hashable {
             pageIndexPosition: self.position,
             indexDisplayMode: indexDisplayMode,
             scrollDirection: self.scrollDirection,
-//            scrollingEnabled: self.scrollingEnabled,
             orientation: self.orientation
         ) {
             content
         }
         return newView
     }
-
-//    internal func allowsScrolling(_ scrollingEnabled: Bool) -> PageView<Content, SelectionValue> {
-//        let newView = Self.init(
-//            selection: self.selection,
-//            pageIndexPosition: self.position,
-//            indexDisplayMode: self.indexDisplayMode,
-//            scrollDirection: scrollDirection,
-//            scrollingEnabled: scrollingEnabled,
-//            orientation: self.orientation
-//        ) {
-//            content
-//        }
-//        return newView
-//    }
-
+    
     public func pagingPosition(_ position: PageIndexPosition) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
@@ -53,7 +38,7 @@ where Content: View, SelectionValue: Hashable {
         }
         return newView
     }
-
+    
     public func pagingOrientation(_ orientation: PagingOrientation) -> PageView<
         Content, SelectionValue
     > {
@@ -67,7 +52,7 @@ where Content: View, SelectionValue: Hashable {
         }
         return newView
     }
-
+    
     public func scrollDirection(_ direction: ScrollDirection) -> PageView<Content, SelectionValue> {
         let newView = Self.init(
             selection: self.selection,
@@ -79,25 +64,26 @@ where Content: View, SelectionValue: Hashable {
         }
         return newView
     }
-
+    
     public let indexDisplayMode: IndexDisplayMode
-
+    
     public let position: PageIndexPosition
     public let orientation: PagingOrientation
-
+    
     public let scrollDirection: ScrollDirection
-//    public let scrollingEnabled: Bool
-
+    
     var selection: Binding<SelectionValue>?
-
+    
     let content: Content
-
+    
+    @State
+    private var size = CGSize()
+    
     public init(
         selection: Binding<SelectionValue>?,
         pageIndexPosition: PageIndexPosition = .trailing,
         indexDisplayMode: IndexDisplayMode = .always,
         scrollDirection: ScrollDirection = .descending,
-//        scrollingEnabled: Bool = true,
         orientation: PagingOrientation = .horizontal,
         @ViewBuilder content: @escaping () -> Content
     ) {
@@ -106,61 +92,72 @@ where Content: View, SelectionValue: Hashable {
         self.scrollDirection = scrollDirection
         self.orientation = orientation
         self.indexDisplayMode = indexDisplayMode
-//        self.scrollingEnabled = scrollingEnabled
         self.content = content()
     }
-
+    
     public var body: some View {
-        GeometryReader { geometry in
-            HStack {
-                TabView(selection: selection) {
-                    content
-                        // Rotates each Tab's content as needed
+        ZStack {
+            Color.clear
+                .allowsHitTesting(false)
+                /*
+                 That one weird trick to w̶h̶i̶t̶e̶n̶ ̶y̶o̶u̶r̶ ̶t̶e̶e̶t̶h̶
+                 constrain a GeometryReader's size
+                 */
+                .background(
+                    GeometryReader { geometry in
+                        LazyVStack {
+                            TabView(selection: selection) {
+                                content
+                                    // Rotates each Tab's content as needed
+                                    .rotationEffect(
+                                        rotation.content
+                                    )
+                                    // Flips each Tab's content as needed
+                                    .rotation3DEffect(
+                                        rotation.content3D,
+                                        axis: axis
+                                    )
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                            .frame(
+                                width: orientation == .horizontal
+                                    ? geometry.size.width
+                                    : geometry.size.height,
+                                height: orientation == .horizontal
+                                    ? geometry.size.height
+                                    : geometry.size.width
+                            )
+                            // Sets the visibility behavior of the paging dots
+                            .indexViewStyle(
+                                PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
+                            )
+                            /*
+                             For some reason, seems both of these modifiers are necessary to
+                             achieve the desired behavior
+                             */
+                            .tabViewStyle(
+                                PageTabViewStyle(indexDisplayMode: displayMode.tabViewStyle)
+                            )
+                        }
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        /*
+                         When the TabView is rotated, SwiftUI tends to favor the smallest possible
+                         frame size, causing all the content, including the paging dots, to collapse inward
+                         */
+                        // Rotates the TabView to the specified vertical position
                         .rotationEffect(
-                            rotation.content
+                            rotation.container
                         )
-                        // Flips each Tab's content as needed
+                        // Flips the TabView to the specified position
                         .rotation3DEffect(
-                            rotation.content3D,
+                            rotation.container3D,
                             axis: axis
                         )
-                }
-                // Sets the visibility behavior of the paging dots
-                .indexViewStyle(
-                    PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
+                    }
                 )
-                /*
-                 For some reason, seems both of these modifiers are necessary to
-                 achieve the desired behavior
-                 */
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: displayMode.tabViewStyle))
-                /*
-                 When the TabView is rotated, SwiftUI tends to favor the smallest possible
-                 frame size, causing all the content, including the paging dots, to collapse inward
-                 */
-                // Rotates the TabView to the specified vertical position
-                .rotationEffect(
-                    rotation.container
-                )
-                // Flips the TabView to the specified position
-                .rotation3DEffect(
-                    rotation.container3D,
-                    axis: axis
-                )
-                // TODO: frame needs to account for orientation
-                .frame(
-                    width: orientation == .horizontal
-                        ? geometry.size.width
-                        : geometry.size.height,
-                    height: orientation == .horizontal
-                        ? geometry.size.height
-                        : geometry.size.width
-                )
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height)
         }
     }
-
+    
     // Index Display Mode
     private var displayMode:
         (
@@ -171,7 +168,7 @@ where Content: View, SelectionValue: Hashable {
         // Just for my own convenience
         let pageStyle = PageIndexViewStyle.BackgroundDisplayMode.self
         let tabViewStyle = PageTabViewStyle.IndexDisplayMode.self
-
+        
         switch indexDisplayMode {
         case .always:
             return (pageStyle.always, tabViewStyle.always)
@@ -183,7 +180,7 @@ where Content: View, SelectionValue: Hashable {
             return (pageStyle.never, tabViewStyle.never)
         }
     }
-
+    
     // Rotation logic for the `.rotationEffect` and `.rotation3DEffect` modifiers.
     private var rotation: (content: Angle, content3D: Angle, container: Angle, container3D: Angle) {
         switch orientation {
@@ -223,7 +220,7 @@ where Content: View, SelectionValue: Hashable {
             }
         }
     }
-
+    
     // Rotation axis logic for the `.rotationEffect` and `.rotation3DEffect` modifiers.
     private var axis: (x: CGFloat, y: CGFloat, z: CGFloat) {
         return (x: 1.0, y: 0.0, z: 0.0)

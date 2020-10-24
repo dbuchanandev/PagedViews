@@ -36,13 +36,6 @@ public struct LibraryModifierContent: LibraryContentProvider {
             category: .layout
         )
         
-//        LibraryItem(
-//            base.allowsScrolling(scrollingEnabled),
-//            visible: true,
-//            title: "Scrolling Enabled",
-//            category: .layout
-//        )
-        
         LibraryItem(
             base.indexDisplayMode(indexDisplayMode),
             visible: true,
