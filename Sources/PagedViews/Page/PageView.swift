@@ -145,7 +145,6 @@ where Content: View, SelectionValue: Hashable {
                                         : geometry.size.width
                                 )
                                 .modifier(WatchOSModifier(frame: geometry.frame(in: .global), position: self.position, orientation: self.orientation))
-                                .border(Color.red)
                         }
                         .frame(
                             width: orientation == .horizontal
@@ -155,7 +154,6 @@ where Content: View, SelectionValue: Hashable {
                                 ? geometry.size.height
                                 : geometry.size.width
                         )
-                        .border(Color.blue)
                         // Sets the visibility behavior of the paging dots
                         .indexViewStyle(
                             PageIndexViewStyle(backgroundDisplayMode: displayMode.pageStyle)
