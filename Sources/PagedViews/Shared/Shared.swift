@@ -23,7 +23,7 @@ public enum IndexDisplayMode {
     case always, automatic, interactive, never
 }
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 protocol Pageable: View {
     associatedtype Content

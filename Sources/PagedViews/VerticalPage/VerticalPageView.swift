@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 public struct VerticalPageView<Content, SelectionValue>: Pageable
 where Content: View, SelectionValue: Hashable {

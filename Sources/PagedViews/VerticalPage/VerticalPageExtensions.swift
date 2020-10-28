@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 extension VerticalPageView {
 
 }
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 extension VerticalPageView
 where SelectionValue == Int {

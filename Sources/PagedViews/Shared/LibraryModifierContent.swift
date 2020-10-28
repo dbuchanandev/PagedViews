@@ -8,7 +8,7 @@
 import DeveloperToolsSupport
 import SwiftUI
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 public struct LibraryModifierContent: LibraryContentProvider {
     // MARK: Public
@@ -82,7 +82,7 @@ public struct LibraryModifierContent: LibraryContentProvider {
     private let indexDisplayMode: IndexDisplayMode = .always
 }
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 public protocol PagingLibrary {
     associatedtype Content
@@ -109,7 +109,7 @@ public protocol PagingLibrary {
     func allowsScrolling(_ bool: Bool) -> Self
 }
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 public struct PagingLibraryContent: PagingLibrary {
     public func indexDisplayMode(_ displayMode: IndexDisplayMode) -> PagingLibraryContent {

@@ -7,7 +7,8 @@ let package = Package(
     name: "PagedViews",
     platforms: [
         .iOS("14.0"),
-        .tvOS("14.0")
+        .tvOS("14.0"),
+        .watchOS("7.0")
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.

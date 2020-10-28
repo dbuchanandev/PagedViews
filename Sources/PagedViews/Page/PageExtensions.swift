@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(watchOS, unavailable)
+
 @available(macOS, unavailable)
 extension PageView
 where SelectionValue == Int {
